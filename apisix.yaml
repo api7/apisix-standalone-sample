@@ -1,0 +1,25 @@
+routes:
+  - id: 1
+    name: get-uuid
+    uri: /uuid
+    methods: ["GET"]
+    upstream:
+      type: roundrobin
+      scheme: https
+      nodes:
+        "httpbin.org:443": 1
+
+  - id: 2
+    name: rewrite-get-uuid
+    uri: /rewrite-get-uuid
+    methods: ["GET"]
+    upstream:
+      type: roundrobin
+      scheme: https
+      pass_host: node
+      nodes:
+        "httpbin.org:443": 1
+    plugins:
+      proxy-rewrite:
+        uri: /uuid
+#END
