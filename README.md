@@ -1,5 +1,18 @@
 # Apache APISIX Standalone Sample
 
+## Basic Usage
+
+```sh
+docker run -d \
+  --restart=always \
+  -p 9080:9080 \
+  -e APISIX_STAND_ALONE=true \
+  -v $(pwd)/apisix.yaml:/usr/local/apisix/conf/apisix.yaml \
+  -v $(pwd)/config.yaml:/usr/local/apisix/conf/config.yaml \
+  --name apisix-dp \
+  apache/apisix:3.11.0-debian
+```
+
 ## Build and Run the Image
 
 ```sh
