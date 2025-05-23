@@ -3,7 +3,7 @@
 ## Basic Usage
 
 ```sh
-docker run -d \
+docker run --rm \
   --restart=always \
   -p 9080:9080 \
   -e APISIX_STAND_ALONE=true \
