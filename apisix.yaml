@@ -1,25 +1,49 @@
 routes:
   - id: 1
-    name: get-uuid
-    uri: /uuid
+    name: get-ip
+    uri: /ip
     methods: ["GET"]
     upstream:
       type: roundrobin
       scheme: https
       nodes:
-        "httpbin.org:443": 1
-
-  - id: 2
-    name: rewrite-get-uuid
-    uri: /rewrite-get-uuid
-    methods: ["GET"]
-    upstream:
-      type: roundrobin
-      scheme: https
-      pass_host: node
-      nodes:
-        "httpbin.org:443": 1
+        "postman-echo.com:443": 1
     plugins:
-      proxy-rewrite:
-        uri: /uuid
+      key-auth: {}
+  - id: 2
+    name: post-data
+    uri: /post
+    methods: ["POST"]
+    upstream:
+      type: roundrobin
+      scheme: https
+      nodes:
+        "postman-echo.com:443": 1
+    plugins:
+      key-auth: {}
+consumers:
+  - username: user1
+    plugins:
+      key-auth:
+        key: user1-key
+      limit-count:
+        count: 1
+        time_window: 10
+        rejected_code: 429
+        key_type: var_combination
+        key: $consumer_name
+      client-control:
+        max_body_size: 1
+  - username: user2
+    plugins:
+      key-auth:
+        key: user2-key
+      limit-count:
+        count: 2
+        time_window: 10
+        rejected_code: 400
+        key_type: var_combination
+        key: $consumer_name
+      client-control:
+        max_body_size: 2
 #END
